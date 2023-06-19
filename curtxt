@@ -1,6 +1,5 @@
 #!/bin/env python
 from math import trunc, ceil
-from subprocess import PIPE, Popen
 import os
 import curses
 
