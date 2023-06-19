@@ -13,7 +13,7 @@ class main_window:
         self.height = curses.LINES - main_window.MARGIN_Y
         self.output_raw = self.__get_raw_output()
         self.page_count = self.__get_page_count()
-        self.width = 80 * self.page_count + 2
+        self.width = 80 * self.page_count + 3
         self.start_x = trunc((curses.COLS - 80 * self.page_count) / 2)
         self.start_y = trunc(main_window.MARGIN_Y / 2)
         self.pages = self.__fill_pages()
@@ -53,7 +53,7 @@ class main_window:
         self.window.erase()
         self.window.border()
         cursor_y = 1
-        cursor_x = 1
+        cursor_x = 2
         for page in self.pages[self.current_page: self.current_page + self.page_count]:
             for line in page:
                 self.window.addstr(cursor_y, cursor_x, line)
