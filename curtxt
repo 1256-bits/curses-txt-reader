@@ -33,7 +33,7 @@ class main_window:
         raw_data = list()
         try:
             for line in f_input():
-                raw_data.append(line)
+                raw_data.append(line.strip())
         except FileNotFoundError:
             curses.endwin()
             print(f'File {argv[1]} not found')
