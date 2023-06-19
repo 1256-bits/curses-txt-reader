@@ -1,0 +1,96 @@
+#!/bin/env python
+from math import trunc, ceil
+from subprocess import PIPE, Popen
+import os
+import curses
+
+
+class main_window:
+    MARGIN_X = 4
+    MARGIN_Y = 8
+
+    def __init__(self):
+        self.height = curses.LINES - main_window.MARGIN_Y
+        self.output_raw = self.__get_raw_output()
+        self.page_count = self.__get_page_count()
+        self.width = 80 * self.page_count + 2
+        self.start_x = trunc((curses.COLS - 80 * self.page_count) / 2)
+        self.start_y = trunc(main_window.MARGIN_Y / 2)
+        self.pages = self.__fill_pages()
+        self.current_page = 0
+        self.__create_window()
+
+    def __fill_pages(self):
+        pages = list()
+        page_len_rows = self.height - 2
+        text_pages_count = ceil(len(self.output_raw) / (self.height - 2))
+        for i in range(0, text_pages_count):
+            pages.append(self.output_raw[i * page_len_rows: i * page_len_rows + page_len_rows])
+        return pages
+
+    def __get_raw_output(self):
+        raw_data = list()
+        while True:
+            try:
+                line = input()
+                raw_data.append(line)
+            except EOFError:
+                return raw_data
+
+    def __get_page_count(self):
+        term_pages_count = trunc((curses.COLS - main_window.MARGIN_X / 2) / 80)
+        text_pages_count = ceil(len(self.output_raw) / (self.height - 2))  # 2 - borders
+        if (text_pages_count > term_pages_count):
+            return term_pages_count
+        return text_pages_count
+
+    def __create_window(self):
+        self.window = curses.newwin(self.height, self.width, self.start_y, self.start_x)
+        self.window.bkgd(" ", curses.color_pair(2))
+        self.__draw_window_content()
+
+    def __draw_window_content(self):
+        self.window.erase()
+        self.window.border()
+        cursor_y = 1
+        cursor_x = 1
+        for page in self.pages[self.current_page: self.current_page + self.page_count]:
+            for line in page:
+                self.window.addstr(cursor_y, cursor_x, line)
+                cursor_y += 1
+            cursor_x += 80
+            cursor_y = 1
+        self.window.refresh()
+
+    def page_up(self):
+        if (self.current_page == 0):
+            return
+        self.current_page -= self.page_count
+        self.__draw_window_content()
+
+    def page_down(self):
+        if (self.current_page >= len(self.pages) - self.page_count):
+            return
+        self.current_page += self.page_count
+        self.__draw_window_content()
+
+
+def main(scr):
+    curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLUE)
+    curses.init_pair(2, curses.COLOR_BLACK, curses.COLOR_WHITE)
+    curses.curs_set(0)
+    scr.bkgd(" ", curses.color_pair(1))
+    scr.refresh()
+    window = main_window()
+    term = open("/dev/tty")
+    os.dup2(term.fileno(), 0)
+    while True:
+        char = scr.getkey()
+        if (char == "KEY_DOWN"):
+            window.page_down()
+        if (char == "KEY_UP"):
+            window.page_up()
+        scr.refresh()
+
+
+curses.wrapper(main)
