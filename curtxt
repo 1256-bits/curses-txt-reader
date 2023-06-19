@@ -2,6 +2,7 @@
 from math import trunc, ceil
 import os
 import curses
+import fileinput
 
 
 class main_window:
@@ -29,12 +30,9 @@ class main_window:
 
     def __get_raw_output(self):
         raw_data = list()
-        while True:
-            try:
-                line = input()
-                raw_data.append(line)
-            except EOFError:
-                return raw_data
+        for line in fileinput.input():
+            raw_data.append(line)
+        return raw_data
 
     def __get_page_count(self):
         term_pages_count = trunc((curses.COLS - main_window.MARGIN_X / 2) / 80)
