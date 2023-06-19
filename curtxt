@@ -31,8 +31,13 @@ class main_window:
 
     def __get_raw_output(self):
         raw_data = list()
-        for line in f_input():
-            raw_data.append(line)
+        try:
+            for line in f_input():
+                raw_data.append(line)
+        except FileNotFoundError:
+            curses.endwin()
+            print(f'File {argv[1]} not found')
+            exit()
         return raw_data
 
     def __get_page_count(self):
