@@ -1,8 +1,9 @@
 #!/bin/env python
 from math import trunc, ceil
+from fileinput import input as f_input
+from sys import argv
 import os
 import curses
-import fileinput
 
 
 class main_window:
@@ -30,7 +31,7 @@ class main_window:
 
     def __get_raw_output(self):
         raw_data = list()
-        for line in fileinput.input():
+        for line in f_input():
             raw_data.append(line)
         return raw_data
 
@@ -73,6 +74,8 @@ class main_window:
 
 
 def main(scr):
+    if os.isatty(0) and (len(argv) == 1):
+        exit()
     curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLUE)
     curses.init_pair(2, curses.COLOR_BLACK, curses.COLOR_WHITE)
     curses.curs_set(0)
