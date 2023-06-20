@@ -91,10 +91,13 @@ def main(scr):
     os.dup2(term.fileno(), 0)
     while True:
         char = scr.getkey()
-        if (char == "KEY_DOWN"):
-            window.page_down()
-        if (char == "KEY_UP"):
-            window.page_up()
+        match char:
+            case "KEY_DOWN":
+                window.page_down()
+            case "KEY_UP":
+                window.page_up()
+            case "Q" | "q":
+                exit()
         scr.refresh()
 
 
