@@ -45,6 +45,8 @@ class main_window:
             curses.endwin()
             print(f'File {argv[1]} not found')
             exit()
+        if (len(raw_data) == 0):
+            exit()
         return raw_data
 
     def __get_page_count(self):
