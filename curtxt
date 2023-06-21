@@ -106,6 +106,7 @@ class bar:
         self.filename = argv[1] if len(argv) > 1 else "stdin"
         self.current_page = 1
         self.page_count = page_count
+        self.bar_visible = True
         self.__create_window()
 
     def __create_window(self):
@@ -114,13 +115,23 @@ class bar:
         self.__draw_window_content()
 
     def __draw_window_content(self):
+        if (not self.bar_visible):
+            self.window.bkgd(" ", curses.color_pair(1))
+            self.window.deleteln()
+            self.window.refresh()
+            return
         progress_str = f'{ceil(self.current_page / self.page_count * 100)}% [{self.current_page}/{self.page_count}]'
+        self.window.bkgd(" ", curses.color_pair(2))
         self.window.addstr(0, 1, self.filename)
         self.window.addstr(0, self.width - len(progress_str) - 1, progress_str)
         self.window.refresh()
 
     def update_bar(self, current_page):
         self.current_page = current_page + 1
+        self.__draw_window_content()
+
+    def toggle_bar(self):
+        self.bar_visible = not self.bar_visible
         self.__draw_window_content()
 
 
@@ -148,6 +159,8 @@ def main(scr):
                 bar_win.update_bar(window.get_current_page())
             case "Q" | "q":
                 exit()
+            case "B" | "b":
+                bar_win.toggle_bar()
         scr.refresh()
 
 
