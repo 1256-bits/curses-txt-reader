@@ -90,24 +90,38 @@ class main_window:
         self.current_page += self.page_count
         self.__draw_window_content()
 
+    def get_current_page(self):
+        return self.current_page
+
+    def get_text_page_count(self):
+        return len(self.pages)
+
 
 class bar:
-    def __init__(self):
+    def __init__(self, page_count):
         self.width = curses.COLS
         self.height = 1
         self.start_x = 0
         self.start_y = curses.LINES - 1
         self.filename = argv[1] if len(argv) > 1 else "stdin"
+        self.current_page = 1
+        self.page_count = page_count
         self.__create_window()
 
     def __create_window(self):
         self.window = curses.newwin(self.height, self.width, self.start_y, self.start_x)
-        self.window.bkgd(" ", curses.color_pair(3))
+        self.window.bkgd(" ", curses.color_pair(2))
         self.__draw_window_content()
 
     def __draw_window_content(self):
+        progress_str = f'{ceil(self.current_page / self.page_count * 100)}% [{self.current_page}/{self.page_count}]'
         self.window.addstr(0, 1, self.filename)
+        self.window.addstr(0, self.width - len(progress_str) - 1, progress_str)
         self.window.refresh()
+
+    def update_bar(self, current_page):
+        self.current_page = current_page + 1
+        self.__draw_window_content()
 
 
 def main(scr):
@@ -120,7 +134,7 @@ def main(scr):
     scr.bkgd(" ", curses.color_pair(1))
     scr.refresh()
     window = main_window()
-    bar_win = bar()
+    bar_win = bar(window.get_text_page_count())
     term = open("/dev/tty")
     os.dup2(term.fileno(), 0)
     while True:
@@ -128,8 +142,10 @@ def main(scr):
         match char:
             case "KEY_DOWN":
                 window.page_down()
+                bar_win.update_bar(window.get_current_page())
             case "KEY_UP":
                 window.page_up()
+                bar_win.update_bar(window.get_current_page())
             case "Q" | "q":
                 exit()
         scr.refresh()
