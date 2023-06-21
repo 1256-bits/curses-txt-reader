@@ -51,7 +51,8 @@ class main_window:
 
     def __get_page_count(self):
         try:
-            term_pages_count = trunc((curses.COLS - main_window.MARGIN_X / 2) / self.longes_line_len)
+            term_pages_count = trunc(
+                (curses.COLS - main_window.MARGIN_X / 2) / self.longes_line_len)
         except ZeroDivisionError:
             term_pages_count = 1
         text_pages_count = ceil(len(self.output_raw) / (self.height - 2))  # 2 - borders
@@ -90,15 +91,36 @@ class main_window:
         self.__draw_window_content()
 
 
+class bar:
+    def __init__(self):
+        self.width = curses.COLS
+        self.height = 1
+        self.start_x = 0
+        self.start_y = curses.LINES - 1
+        self.filename = argv[1] if len(argv) > 1 else "stdin"
+        self.__create_window()
+
+    def __create_window(self):
+        self.window = curses.newwin(self.height, self.width, self.start_y, self.start_x)
+        self.window.bkgd(" ", curses.color_pair(3))
+        self.__draw_window_content()
+
+    def __draw_window_content(self):
+        self.window.addstr(0, 1, self.filename)
+        self.window.refresh()
+
+
 def main(scr):
     if os.isatty(0) and (len(argv) == 1):
         exit()
     curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLUE)
     curses.init_pair(2, curses.COLOR_BLACK, curses.COLOR_WHITE)
+    curses.init_pair(3, curses.COLOR_WHITE, curses.COLOR_BLACK)
     curses.curs_set(0)
     scr.bkgd(" ", curses.color_pair(1))
     scr.refresh()
     window = main_window()
+    bar_win = bar()
     term = open("/dev/tty")
     os.dup2(term.fileno(), 0)
     while True:
