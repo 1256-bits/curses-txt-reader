@@ -1,9 +1,8 @@
 # Curses txt reader
-Simple ncurses based plain text reader written in python.
- - [x] Reads text from pipes.
- - [x] Reads text from file
- - [x] Wrap text at 80 characters to avoid overflow
- Fix bugs:
- - [x] The window fails to initiate properly if the longest line exceeds the
- maximum available width
- - [x] Preserve formatting
+Simple ncurses-based plain text reader written in python.
+It can read text from stdin and from a file (the latter takes precedence).
+Controls:
+    * ArrowUp/Down - page up and down
+    * Q - quit
+TODO:
+- [ ] add page counter
