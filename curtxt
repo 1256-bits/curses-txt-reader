@@ -15,7 +15,7 @@ class main_window:
         self.output_raw = self.__get_raw_output()
         self.longes_line_len = len(max(self.output_raw, key=len)) or 80
         self.page_count = self.__get_page_count()
-        self.width = self.longes_line_len * self.page_count + 3
+        self.width = (self.longes_line_len + 1) * self.page_count + 3
         self.start_x = trunc((curses.COLS - self.longes_line_len * self.page_count) / 2)
         self.start_y = trunc(main_window.MARGIN_Y / 2)
         self.pages = self.__fill_pages()
@@ -74,7 +74,7 @@ class main_window:
             for line in page:
                 self.window.addstr(cursor_y, cursor_x, line)
                 cursor_y += 1
-            cursor_x += self.longes_line_len
+            cursor_x += self.longes_line_len + 1
             cursor_y = 1
         self.window.refresh()
 
