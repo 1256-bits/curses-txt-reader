@@ -6,4 +6,4 @@ Simple ncurses based plain text reader written in python.
  Fix bugs:
  - [x] The window fails to initiate properly if the longest line exceeds the
  maximum available width
- - [ ] Preserve formatting
+ - [x] Preserve formatting

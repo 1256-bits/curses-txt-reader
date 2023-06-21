@@ -35,12 +35,12 @@ class main_window:
         max_len_available = curses.COLS - self.MARGIN_X * 2 - 2
         try:
             for line in f_input():
-                line_st = line.strip()
+                line_st = line.rstrip()
                 if (len(line_st) > max_len_available):
                     raw_data.append(line_st[0:max_len_available])
                     raw_data.append(line_st[max_len_available + 1: len(line_st)])
                     continue
-                raw_data.append(line.strip())
+                raw_data.append(line_st)
         except FileNotFoundError:
             curses.endwin()
             print(f'File {argv[1]} not found')
