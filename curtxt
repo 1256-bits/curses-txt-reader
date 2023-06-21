@@ -32,8 +32,14 @@ class main_window:
 
     def __get_raw_output(self):
         raw_data = list()
+        max_len_available = curses.COLS - self.MARGIN_X * 2 - 2
         try:
             for line in f_input():
+                line_st = line.strip()
+                if (len(line_st) > max_len_available):
+                    raw_data.append(line_st[0:max_len_available])
+                    raw_data.append(line_st[max_len_available + 1: len(line_st)])
+                    continue
                 raw_data.append(line.strip())
         except FileNotFoundError:
             curses.endwin()
