@@ -13,7 +13,7 @@ class main_window:
     def __init__(self):
         self.height = curses.LINES - main_window.MARGIN_Y
         self.output_raw = self.__get_raw_output()
-        self.longes_line_len = len(max(self.output_raw, key=len))
+        self.longes_line_len = len(max(self.output_raw, key=len)) or 80
         self.page_count = self.__get_page_count()
         self.width = self.longes_line_len * self.page_count + 3
         self.start_x = trunc((curses.COLS - self.longes_line_len * self.page_count) / 2)
@@ -50,7 +50,10 @@ class main_window:
         return raw_data
 
     def __get_page_count(self):
-        term_pages_count = trunc((curses.COLS - main_window.MARGIN_X / 2) / self.longes_line_len)
+        try:
+            term_pages_count = trunc((curses.COLS - main_window.MARGIN_X / 2) / self.longes_line_len)
+        except ZeroDivisionError:
+            term_pages_count = 1
         text_pages_count = ceil(len(self.output_raw) / (self.height - 2))  # 2 - borders
         if (text_pages_count > term_pages_count):
             return term_pages_count
