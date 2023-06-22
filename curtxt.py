@@ -118,13 +118,12 @@ class bar:
         self.__draw_window_content()
 
     def __draw_window_content(self):
+        self.window.deleteln()
         if (not self.bar_visible):
             self.window.bkgd(" ", curses.color_pair(1))
-            self.window.deleteln()
             self.window.refresh()
             return
         progress_str = f'{ceil(self.current_page / self.page_count * 100)}% [{self.current_page}/{self.page_count}]'
-        self.window.deleteln()
         self.window.bkgd(" ", curses.color_pair(2))
         self.window.addstr(0, 1, self.filename)
         self.window.addstr(0, self.width - len(progress_str) - 1, progress_str)
