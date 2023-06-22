@@ -21,8 +21,6 @@ class main_window:
         self.start_y = trunc(main_window.MARGINS_Y / 2)
         self.pages = self.__fill_pages()
         self.current_page = 0
-        with open("win.log", "a") as log:
-            print(f'{curses.COLS}, {self.longest_line_len}, {self.width}, {self.start_x}', file=log, flush=True)
         self.__create_window()
 
     def __fill_pages(self):
