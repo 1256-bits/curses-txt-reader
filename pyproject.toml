@@ -25,6 +25,7 @@ requires-python = ">=3.10"
 file = "LICENSE"
 
 [project.urls]
+Homepage = "https://github.com/1256-bits/curses-txt-reader" 
 Source = "https://github.com/1256-bits/curses-txt-reader"
 
 [project.scripts]
