@@ -51,11 +51,11 @@ class main_window:
         return raw_data
 
     def __get_page_count(self):
-        try:
+        if (self.longest_line_len == 0):
+            term_pages_count = 1
+        else:
             term_pages_count = trunc(
                 (curses.COLS - main_window.MARGINS_X / 2) / self.longest_line_len)
-        except ZeroDivisionError:
-            term_pages_count = 1
         text_pages_count = ceil(len(self.output_raw) / (self.height - 2))  # 2 - borders
         if (term_pages_count <= 0):
             term_pages_count = 1
