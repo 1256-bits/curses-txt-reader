@@ -17,10 +17,12 @@ class main_window:
         self.longest_line_len = len(max(self.output_raw, key=len)) or 80
         self.page_count = self.__get_page_count()
         self.width = (self.longest_line_len + 1) * self.page_count + 3
-        self.start_x = trunc((curses.COLS - self.longest_line_len * self.page_count) / 2)
+        self.start_x = trunc((curses.COLS - self.longest_line_len * self.page_count - 4) / 2)
         self.start_y = trunc(main_window.MARGINS_Y / 2)
         self.pages = self.__fill_pages()
         self.current_page = 0
+        with open("win.log", "a") as log:
+            print(f'{curses.COLS}, {self.longest_line_len}, {self.width}, {self.start_x}', file=log, flush=True)
         self.__create_window()
 
     def __fill_pages(self):
@@ -33,7 +35,7 @@ class main_window:
 
     def __get_raw_output(self):
         raw_data = list()
-        max_len_available = curses.COLS - trunc(main_window.MARGINS_X / 2) - 2
+        max_len_available = curses.COLS - main_window.MARGINS_X - 4
         try:
             for line in f_input():
                 line_st = line.rstrip()
