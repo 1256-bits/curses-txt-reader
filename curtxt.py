@@ -13,10 +13,10 @@ class main_window:
     def __init__(self):
         self.height = curses.LINES - main_window.MARGIN_Y
         self.output_raw = self.__get_raw_output()
-        self.longes_line_len = len(max(self.output_raw, key=len)) or 80
+        self.longest_line_len = len(max(self.output_raw, key=len)) or 80
         self.page_count = self.__get_page_count()
-        self.width = (self.longes_line_len + 1) * self.page_count + 3
-        self.start_x = trunc((curses.COLS - self.longes_line_len * self.page_count) / 2)
+        self.width = (self.longest_line_len + 1) * self.page_count + 3
+        self.start_x = trunc((curses.COLS - self.longest_line_len * self.page_count) / 2)
         self.start_y = trunc(main_window.MARGIN_Y / 2)
         self.pages = self.__fill_pages()
         self.current_page = 0
@@ -32,7 +32,7 @@ class main_window:
 
     def __get_raw_output(self):
         raw_data = list()
-        max_len_available = curses.COLS - self.MARGIN_X * 2 - 2
+        max_len_available = curses.COLS - main_window.MARGIN_X * 2 - 2
         try:
             for line in f_input():
                 line_st = line.rstrip()
@@ -52,7 +52,7 @@ class main_window:
     def __get_page_count(self):
         try:
             term_pages_count = trunc(
-                (curses.COLS - main_window.MARGIN_X / 2) / self.longes_line_len)
+                (curses.COLS - main_window.MARGIN_X / 2) / self.longest_line_len)
         except ZeroDivisionError:
             term_pages_count = 1
         text_pages_count = ceil(len(self.output_raw) / (self.height - 2))  # 2 - borders
@@ -74,7 +74,7 @@ class main_window:
             for line in page:
                 self.window.addstr(cursor_y, cursor_x, line)
                 cursor_y += 1
-            cursor_x += self.longes_line_len + 1
+            cursor_x += self.longest_line_len + 1
             cursor_y = 1
         self.window.refresh()
 
