@@ -8,17 +8,17 @@ import curses
 
 class main_window:
     # SUMS of both left and right margins
-    MARGIN_X = 4
-    MARGIN_Y = 8
+    MARGINS_X = 4
+    MARGINS_Y = 8
 
     def __init__(self):
-        self.height = curses.LINES - main_window.MARGIN_Y
+        self.height = curses.LINES - main_window.MARGINS_Y
         self.output_raw = self.__get_raw_output()
         self.longest_line_len = len(max(self.output_raw, key=len)) or 80
         self.page_count = self.__get_page_count()
         self.width = (self.longest_line_len + 1) * self.page_count + 3
         self.start_x = trunc((curses.COLS - self.longest_line_len * self.page_count) / 2)
-        self.start_y = trunc(main_window.MARGIN_Y / 2)
+        self.start_y = trunc(main_window.MARGINS_Y / 2)
         self.pages = self.__fill_pages()
         self.current_page = 0
         self.__create_window()
@@ -33,7 +33,7 @@ class main_window:
 
     def __get_raw_output(self):
         raw_data = list()
-        max_len_available = curses.COLS - trunc(main_window.MARGIN_X / 2) - 2
+        max_len_available = curses.COLS - trunc(main_window.MARGINS_X / 2) - 2
         try:
             for line in f_input():
                 line_st = line.rstrip()
@@ -53,7 +53,7 @@ class main_window:
     def __get_page_count(self):
         try:
             term_pages_count = trunc(
-                (curses.COLS - main_window.MARGIN_X / 2) / self.longest_line_len)
+                (curses.COLS - main_window.MARGINS_X / 2) / self.longest_line_len)
         except ZeroDivisionError:
             term_pages_count = 1
         text_pages_count = ceil(len(self.output_raw) / (self.height - 2))  # 2 - borders
