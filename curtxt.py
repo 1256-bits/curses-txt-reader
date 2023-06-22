@@ -7,6 +7,7 @@ import curses
 
 
 class main_window:
+    # SUMS of both left and right margins
     MARGIN_X = 4
     MARGIN_Y = 8
 
