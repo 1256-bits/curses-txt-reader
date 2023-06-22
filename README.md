@@ -2,8 +2,29 @@
 [![License: MPL 2.0](https://img.shields.io/badge/License-MPL_2.0-brightgreen.svg)](https://opensource.org/licenses/MPL-2.0)
 ## About
 A simple ncurses-based plain text reader written in python.  
-It can read text from stdin and from a file (the latter takes precedence).
+## Instalation
+From PyPI:  
+	
+    $ pip install curtxt-reader
+
+From source:
+
+    $ git clone https://github.com/1256-bits/curses-txt-reader.git
+    $ cd curses-txt-reader
+    $ pip install .
+
+## Usage
+Curses txt reader accepts text from both stdin via pipes  
+	
+    $ echo something | curtxt
+
+and a (single) file
+	
+    $ curtxt file.txt
+    
+When presented with both stdin and a file at the same time it will open the file.
+Curses txt reader does not accept multiple files. Use cat instead.
 ### Controls:
-* ArrowUp/Down - page up and down
+* Arrow Up/Down - page up and down
 * Q - quit
-* B - toggle progress bar2 
+* B - toggle progress bar
