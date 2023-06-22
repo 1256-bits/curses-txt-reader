@@ -32,7 +32,7 @@ class main_window:
 
     def __get_raw_output(self):
         raw_data = list()
-        max_len_available = curses.COLS - main_window.MARGIN_X * 2 - 2
+        max_len_available = curses.COLS - trunc(main_window.MARGIN_X / 2) - 2
         try:
             for line in f_input():
                 line_st = line.rstrip()
