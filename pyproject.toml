@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "curtxt-reader"
-version = "1.0.0"
+version = "1.0.1"
 description = "A simple ncurses-based plain text reader written"
 readme = "README.md"
 authors = [{ name = "1256-bits" , email = "128bit@eclipso.eu" }]
