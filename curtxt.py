@@ -38,8 +38,8 @@ class main_window:
             for line in f_input():
                 line_st = line.rstrip()
                 if (len(line_st) > max_len_available):
-                    raw_data.append(line_st[0:max_len_available])
-                    raw_data.append(line_st[max_len_available + 1: len(line_st)])
+                    for i in range(0, len(line_st) - 1, max_len_available):
+                        raw_data.append(line_st[i:i + max_len_available])
                     continue
                 raw_data.append(line_st)
         except FileNotFoundError:
@@ -57,6 +57,8 @@ class main_window:
         except ZeroDivisionError:
             term_pages_count = 1
         text_pages_count = ceil(len(self.output_raw) / (self.height - 2))  # 2 - borders
+        if (term_pages_count <= 0):
+            term_pages_count = 1
         if (text_pages_count > term_pages_count):
             return term_pages_count
         return text_pages_count
