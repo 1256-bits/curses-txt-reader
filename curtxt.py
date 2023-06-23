@@ -92,20 +92,25 @@ class main_window:
         self.__draw_window_content()
 
     def get_current_page(self):
-        return self.current_page
+        # Pages are expected to be counted from 1
+        return self.current_page + 1
 
     def get_text_page_count(self):
         return len(self.pages)
 
+    def go_to_page(self, page_num):
+        self.current_page = page_num - 1
+        self.__draw_window_content()
+
 
 class bar:
-    def __init__(self, page_count):
+    def __init__(self, page_count, current_page):
         self.width = curses.COLS
         self.height = 1
         self.start_x = 0
         self.start_y = curses.LINES - 1
         self.filename = argv[1] if len(argv) > 1 else "stdin"
-        self.current_page = 1
+        self.current_page = current_page
         self.page_count = page_count
         self.bar_visible = True
         self.__create_window()
@@ -128,7 +133,7 @@ class bar:
         self.window.refresh()
 
     def update_bar(self, current_page):
-        self.current_page = current_page + 1
+        self.current_page = current_page
         self.__draw_window_content()
 
     def toggle_bar(self):
@@ -146,7 +151,8 @@ def main(scr):
     scr.bkgd(" ", curses.color_pair(1))
     scr.refresh()
     window = main_window()
-    bar_win = bar(window.get_text_page_count())
+    window.go_to_page(3)
+    bar_win = bar(window.get_text_page_count(), window.get_current_page())
     term = open("/dev/tty")
     os.dup2(term.fileno(), 0)
     while True:
