@@ -146,6 +146,7 @@ def main(scr):
     curses.init_pair(2, curses.COLOR_BLACK, curses.COLOR_WHITE)
     curses.init_pair(3, curses.COLOR_WHITE, curses.COLOR_BLACK)
     curses.curs_set(0)
+    histfile = get_histfile()
     scr.bkgd(" ", curses.color_pair(1))
     scr.refresh()
     window = main_window()
@@ -166,6 +167,17 @@ def main(scr):
             case "B" | "b":
                 bar_win.toggle_bar()
         scr.refresh()
+
+
+def get_histfile():
+    path = f'{os.environ["HOME"]}/.config/curtxt-reader'
+    histfile_path = f'{path}/history'
+    if (not os.path.exists(path)):
+        os.mkdir(path)
+    if (os.path.isfile(histfile_path)):
+        return open(histfile_path)
+    open(histfile_path, "x")
+    return open(histfile_path)
 
 
 if __name__ == "__main__":
