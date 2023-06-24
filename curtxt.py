@@ -142,8 +142,6 @@ class bar:
 
 
 def main(scr):
-    if os.isatty(0) and (len(argv) == 1):
-        exit()
     curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLUE)
     curses.init_pair(2, curses.COLOR_BLACK, curses.COLOR_WHITE)
     curses.init_pair(3, curses.COLOR_WHITE, curses.COLOR_BLACK)
@@ -151,7 +149,6 @@ def main(scr):
     scr.bkgd(" ", curses.color_pair(1))
     scr.refresh()
     window = main_window()
-    window.go_to_page(3)
     bar_win = bar(window.get_text_page_count(), window.get_current_page())
     term = open("/dev/tty")
     os.dup2(term.fileno(), 0)
@@ -171,4 +168,7 @@ def main(scr):
         scr.refresh()
 
 
-curses.wrapper(main)
+if __name__ == "__main__":
+    if os.isatty(0) and (len(argv) == 1):
+        exit()
+    curses.wrapper(main)
