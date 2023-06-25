@@ -180,7 +180,7 @@ def get_histfile():
     return open(histfile_path)
 
 
-if __name__ == "__main__":
+def init():
     if os.isatty(0) and (len(argv) == 1):
         exit()
     curses.wrapper(main)

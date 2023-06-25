@@ -29,4 +29,4 @@ Homepage = "https://github.com/1256-bits/curses-txt-reader"
 Source = "https://github.com/1256-bits/curses-txt-reader"
 
 [project.scripts]
-curtxt = "curtxt.__main__:main"
+curtxt = "curtxt:init"
