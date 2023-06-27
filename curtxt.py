@@ -1,7 +1,6 @@
 #!/bin/env python
 from math import trunc, ceil
-from fileinput import input as f_input
-from sys import argv
+from sys import argv, stdin
 import os
 import curses
 
@@ -13,8 +12,9 @@ class main_window:
 
     def __init__(self):
         self.height = curses.LINES - main_window.MARGINS_Y
-        self.output_raw = self.__get_raw_output()
-        self.longest_line_len = len(max(self.output_raw, key=len)) or 80
+        self.input_raw = self.__get_raw_input()
+        self.output_lines = self.__get_output_lines()
+        self.longest_line_len = len(max(self.output_lines, key=len)) or 80
         self.page_count = self.__get_page_count()
         self.width = (self.longest_line_len + 1) * self.page_count + 3
         self.start_x = trunc((curses.COLS - self.longest_line_len * self.page_count - 4) / 2)
@@ -23,38 +23,51 @@ class main_window:
         self.current_page = 0
         self.__create_window()
 
-    def __fill_pages(self):
-        pages = list()
-        page_len_rows = self.height - 2
-        text_pages_count = ceil(len(self.output_raw) / (self.height - 2))
-        for i in range(0, text_pages_count):
-            pages.append(self.output_raw[i * page_len_rows: i * page_len_rows + page_len_rows])
-        return pages
-
-    def __get_raw_output(self):
-        raw_data = list()
-        max_len_available = curses.COLS - main_window.MARGINS_X - 4
-        try:
-            for line in f_input():
-                line_st = line.rstrip()
-                if (len(line_st) > max_len_available):
-                    for i in range(0, len(line_st) - 1, max_len_available):
-                        raw_data.append(line_st[i:i + max_len_available])
-                    continue
-                raw_data.append(line_st)
-        except FileNotFoundError:
+    def __get_raw_input(self):
+        if (len(argv) > 1) and not (os.path.exists(argv[1])):
             curses.endwin()
             print(f'File {argv[1]} not found')
             exit()
-        if (len(raw_data) == 0):
-            exit()
-        return raw_data
+        if (len(argv) > 1):
+            with open(argv[1]) as file:
+                return file.readlines()
+        if not (os.isatty(0)):
+            return stdin.readlines()
+        else:
+            print("What happened here?")
+
+    def __fill_pages(self):
+        pages = list()
+        page_len_rows = self.height - 2
+        text_pages_count = ceil(len(self.output_lines) / (self.height - 2))
+        for i in range(0, text_pages_count):
+            pages.append(self.output_lines[i * page_len_rows: i * page_len_rows + page_len_rows])
+        return pages
+
+    def __get_output_lines(self):
+        raw_data = list()
+        max_len_available = curses.COLS - main_window.MARGINS_X - 4
+        # try:
+        #    for line in f_input():
+        #        line_st = line.rstrip()
+        #        if (len(line_st) > max_len_available):
+        #            for i in range(0, len(line_st) - 1, max_len_available):
+        #                raw_data.append(line_st[i:i + max_len_available])
+        #            continue
+        #        raw_data.append(line_st)
+        # except FileNotFoundError:
+        #    curses.endwin()
+        #    print(f'File {argv[1]} not found')
+        #    exit()
+        # if (len(raw_data) == 0):
+        #    exit()
+        # return raw_data
 
     def __get_page_count(self):
         if (self.longest_line_len == 0):
             return 1
         term_pages_count = trunc((curses.COLS - main_window.MARGINS_X / 2) / self.longest_line_len)
-        text_pages_count = ceil(len(self.output_raw) / (self.height - 2))  # 2 - borders
+        text_pages_count = ceil(len(self.output_lines) / (self.height - 2))  # 2 - borders
         if (term_pages_count <= 0):
             term_pages_count = 1
         if (text_pages_count > term_pages_count):
