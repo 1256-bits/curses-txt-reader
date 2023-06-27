@@ -47,21 +47,14 @@ class main_window:
     def __get_output_lines(self):
         raw_data = list()
         max_len_available = curses.COLS - main_window.MARGINS_X - 4
-        # try:
-        #    for line in f_input():
-        #        line_st = line.rstrip()
-        #        if (len(line_st) > max_len_available):
-        #            for i in range(0, len(line_st) - 1, max_len_available):
-        #                raw_data.append(line_st[i:i + max_len_available])
-        #            continue
-        #        raw_data.append(line_st)
-        # except FileNotFoundError:
-        #    curses.endwin()
-        #    print(f'File {argv[1]} not found')
-        #    exit()
-        # if (len(raw_data) == 0):
-        #    exit()
-        # return raw_data
+        for line in self.input_raw():
+            line_st = line.rstrip()
+            if (len(line_st) > max_len_available):
+                for i in range(0, len(line_st) - 1, max_len_available):
+                    raw_data.append(line_st[i:i + max_len_available])
+                continue
+            raw_data.append(line_st)
+        return raw_data
 
     def __get_page_count(self):
         if (self.longest_line_len == 0):
