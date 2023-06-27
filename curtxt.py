@@ -25,6 +25,7 @@ class main_window:
         self.__create_window()
 
     def __get_raw_input(self):
+        # How are you going to resize if you keep it inside of the class?
         if (len(argv) > 1) and not (os.path.exists(argv[1])):
             curses.endwin()
             print(f'File {argv[1]} not found')
@@ -48,7 +49,7 @@ class main_window:
     def __get_output_lines(self):
         raw_data = list()
         max_len_available = curses.COLS - main_window.MARGINS_X - 4
-        for line in self.input_raw():
+        for line in self.input_raw:
             line_st = line.rstrip()
             if (len(line_st) > max_len_available):
                 for i in range(0, len(line_st) - 1, max_len_available):
