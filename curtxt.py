@@ -202,6 +202,8 @@ def main(scr):
                 exit()
             case "B" | "b":
                 bar_win.toggle_bar()
+            case "KEY_HOME":
+                window.go_to_line(0)
         scr.refresh()
 
 
