@@ -183,14 +183,15 @@ def main(scr):
 
 
 def get_history():
-    path = f'{os.environ["HOME"]}/.config/curtxt-reader'
+    path = f'{os.environ["HOME"]}/.local/share/curtxt-reader'
     histfile_path = f'{path}/history'
     if (not os.path.exists(path)):
         os.mkdir(path)
     if (os.path.isfile(histfile_path)):
         return open(histfile_path)
     open(histfile_path, "x")
-    return yaml.load(open(histfile_path).read(), yaml.SafeLoader)
+    return yaml.load(open(histfile_path).read(), yaml.SafeLoader) or {}
+
 
 def init():
     if os.isatty(0) and (len(argv) == 1):
