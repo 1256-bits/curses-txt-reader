@@ -2,6 +2,7 @@
 from math import trunc, ceil
 from sys import argv, stdin
 from hashlib import md5
+import yaml
 import os
 import curses
 
@@ -156,13 +157,15 @@ def main(scr):
     curses.init_pair(2, curses.COLOR_BLACK, curses.COLOR_WHITE)
     curses.init_pair(3, curses.COLOR_WHITE, curses.COLOR_BLACK)
     curses.curs_set(0)
-    histfile = get_histfile()
+    hist_json = get_history()
     scr.bkgd(" ", curses.color_pair(1))
     scr.refresh()
     window = main_window()
     bar_win = bar(window.get_text_page_count(), window.get_current_page())
     term = open("/dev/tty")
     os.dup2(term.fileno(), 0)
+    if (window.hash in hist_json):
+        window.go_to_page(hist_json[window.hash])
     while True:
         char = scr.getkey()
         match char:
@@ -179,7 +182,7 @@ def main(scr):
         scr.refresh()
 
 
-def get_histfile():
+def get_history():
     path = f'{os.environ["HOME"]}/.config/curtxt-reader'
     histfile_path = f'{path}/history'
     if (not os.path.exists(path)):
@@ -187,8 +190,7 @@ def get_histfile():
     if (os.path.isfile(histfile_path)):
         return open(histfile_path)
     open(histfile_path, "x")
-    return open(histfile_path)
-
+    return yaml.load(open(histfile_path).read(), yaml.SafeLoader)
 
 def init():
     if os.isatty(0) and (len(argv) == 1):
