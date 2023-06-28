@@ -30,8 +30,10 @@ Previously opened files will open on the same page they were left off
 * Arrow Up/Down - page up and down
 * Q - quit (Ctrl+C is also fine)
 * B - toggle progress bar
+* Home - got to the first page
+* End - go to the last page
 ### Feature roadmap
-- [ ] Home/End to go to the start/end
 - [ ] Moving to a specific page by it's number
 - [ ] Bookmarks
 - [ ] --version and --help options
+- [ ] resize the window if the terminal is resized
