@@ -117,7 +117,7 @@ class main_window:
         return self.current_page * (self.height - 2)
 
     def go_to_line(self, line_num):
-        self.current_page = ceil(line_num / (self.height - 2))
+        self.current_page = trunc(line_num / (self.height - 2))
         self.__draw_window_content()
 
 
@@ -165,12 +165,14 @@ def main(scr):
     curses.init_pair(2, curses.COLOR_BLACK, curses.COLOR_WHITE)
     curses.init_pair(3, curses.COLOR_WHITE, curses.COLOR_BLACK)
     curses.curs_set(0)
-    hist_json = get_history()
+    hist_yaml = get_history()
     scr.bkgd(" ", curses.color_pair(1))
     scr.refresh()
     window = main_window()
-    if (window.hash in hist_json):
-        window.go_to_page(hist_json[window.hash]["pages"])
+    if (window.hash in hist_yaml):
+        window.go_to_line(hist_yaml[window.hash]["line"])
+    else:
+        hist_yaml[window.hash] = {"line": 0, "bookmarks": list()}
     bar_win = bar(window.get_text_page_count(), window.get_current_page())
     term = open("/dev/tty")
     os.dup2(term.fileno(), 0)
@@ -184,6 +186,9 @@ def main(scr):
                 window.page_up()
                 bar_win.update_bar(window.get_current_page())
             case "Q" | "q":
+                hist_yaml[window.hash]["line"] = window.get_current_line()
+                with open(f'{os.environ["HOME"]}/.local/share/curtxt-reader/history', "w") as file:
+                    file.write(yaml.dump(hist_yaml))
                 exit()
             case "B" | "b":
                 bar_win.toggle_bar()
@@ -196,9 +201,9 @@ def get_history():
     if (not os.path.exists(path)):
         os.mkdir(path)
     if (os.path.isfile(histfile_path)):
-        return open(histfile_path)
-    open(histfile_path, "x")
-    return yaml.load(open(histfile_path).read(), yaml.SafeLoader) or {}
+        return yaml.load(open(histfile_path).read(), yaml.SafeLoader) or {}
+    open(histfile_path, "x").close()
+    return {}
 
 
 def init():
