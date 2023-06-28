@@ -5,6 +5,7 @@ from hashlib import md5
 import yaml
 import os
 import curses
+import signal
 
 
 class main_window:
@@ -164,6 +165,11 @@ class bar:
 
 
 def main(scr):
+    def save_and_exit(signal, frame):
+        hist_yaml[window.hash]["line"] = window.get_current_line()
+        with open(f'{os.environ["HOME"]}/.local/share/curtxt-reader/history', "w") as file:
+            file.write(yaml.dump(hist_yaml))
+        exit()
     curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLUE)
     curses.init_pair(2, curses.COLOR_BLACK, curses.COLOR_WHITE)
     curses.init_pair(3, curses.COLOR_WHITE, curses.COLOR_BLACK)
@@ -179,6 +185,7 @@ def main(scr):
     bar_win = bar(window.get_text_page_count(), window.get_current_page())
     term = open("/dev/tty")
     os.dup2(term.fileno(), 0)
+    signal.signal(signal.SIGINT, save_and_exit)
     while True:
         char = scr.getkey()
         match char:
