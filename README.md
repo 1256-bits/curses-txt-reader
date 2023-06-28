@@ -2,7 +2,7 @@
 [![License: MPL 2.0](https://img.shields.io/badge/License-MPL_2.0-brightgreen.svg)](https://opensource.org/licenses/MPL-2.0)
 [![PyPI version](https://badge.fury.io/py/curtxt-reader.svg)](https://badge.fury.io/py/curtxt-reader)
 ## About
-A simple ncurses-based plain text reader written in python.  
+A simple ncurses-based plain text reader written in python.
 ## Instalation
 From PyPI:  
 	
@@ -25,6 +25,7 @@ and a (single) file
     
 When presented with both stdin and a file at the same time it will open the file.
 Curses txt reader does not accept multiple files. Use cat instead.
+Previously opened files will open on the same page they were left off
 ### Controls:
 * Arrow Up/Down - page up and down
 * Q - quit
