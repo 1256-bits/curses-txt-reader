@@ -113,6 +113,13 @@ class main_window:
         self.current_page = page_num - 1
         self.__draw_window_content()
 
+    def get_current_line(self):
+        return self.current_page * (self.height - 2)
+
+    def go_to_line(self, line_num):
+        self.current_page = ceil(line_num / (self.height - 2))
+        self.__draw_window_content()
+
 
 class bar:
     def __init__(self, page_count, current_page):
@@ -139,6 +146,7 @@ class bar:
             return
         progress_str = f'{ceil(self.current_page / self.page_count * 100)}% [{self.current_page}/{self.page_count}]'
         self.window.bkgd(" ", curses.color_pair(2))
+        # BUG: if the filename is too long to fit on a screen it crashes
         self.window.addstr(0, 1, self.filename)
         self.window.addstr(0, self.width - len(progress_str) - 1, progress_str)
         self.window.refresh()
@@ -161,11 +169,11 @@ def main(scr):
     scr.bkgd(" ", curses.color_pair(1))
     scr.refresh()
     window = main_window()
+    if (window.hash in hist_json):
+        window.go_to_page(hist_json[window.hash])
     bar_win = bar(window.get_text_page_count(), window.get_current_page())
     term = open("/dev/tty")
     os.dup2(term.fileno(), 0)
-    if (window.hash in hist_json):
-        window.go_to_page(hist_json[window.hash])
     while True:
         char = scr.getkey()
         match char:
