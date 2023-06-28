@@ -28,5 +28,5 @@ Curses txt reader does not accept multiple files. Use cat instead.
 Previously opened files will open on the same page they were left off
 ### Controls:
 * Arrow Up/Down - page up and down
-* Q - quit
+* Q - quit (Ctrl+C is also fine)
 * B - toggle progress bar
