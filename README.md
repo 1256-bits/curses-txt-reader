@@ -30,3 +30,8 @@ Previously opened files will open on the same page they were left off
 * Arrow Up/Down - page up and down
 * Q - quit (Ctrl+C is also fine)
 * B - toggle progress bar
+### Feature roadmap
+- [ ] Home/End to go to the start/end
+- [ ] Moving to a specific page by it's number
+- [ ] Bookmarks
+- [ ] --version and --help options
