@@ -121,6 +121,9 @@ class main_window:
         self.current_page = trunc(line_num / (self.height - 2))
         self.__draw_window_content()
 
+    def get_last_page(self):
+        return len(self.pages)
+
 
 class bar:
     def __init__(self, page_count, current_page):
@@ -204,6 +207,10 @@ def main(scr):
                 bar_win.toggle_bar()
             case "KEY_HOME":
                 window.go_to_line(0)
+                bar_win.update_bar(window.get_current_page())
+            case "KEY_END":
+                window.go_to_page(window.get_last_page())
+                bar_win.update_bar(window.get_current_page())
         scr.refresh()
 
 
