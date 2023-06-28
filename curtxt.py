@@ -170,7 +170,7 @@ def main(scr):
     scr.refresh()
     window = main_window()
     if (window.hash in hist_json):
-        window.go_to_page(hist_json[window.hash])
+        window.go_to_page(hist_json[window.hash]["pages"])
     bar_win = bar(window.get_text_page_count(), window.get_current_page())
     term = open("/dev/tty")
     os.dup2(term.fileno(), 0)
