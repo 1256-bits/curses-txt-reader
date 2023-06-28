@@ -1,6 +1,7 @@
 #!/bin/env python
 from math import trunc, ceil
 from sys import argv, stdin
+from hashlib import md5
 import os
 import curses
 
@@ -13,6 +14,7 @@ class main_window:
     def __init__(self):
         self.height = curses.LINES - main_window.MARGINS_Y
         self.input_raw = self.__get_raw_input()
+        self.hash = md5("".join(self.input_raw).encode("UTF-8")).hexdigest()
         self.output_lines = self.__get_output_lines()
         self.longest_line_len = len(max(self.output_lines, key=len)) or 80
         self.page_count = self.__get_page_count()
