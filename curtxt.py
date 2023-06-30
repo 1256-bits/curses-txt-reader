@@ -228,6 +228,17 @@ def get_history():
 def init():
     if os.isatty(0) and (len(argv) == 1):
         exit()
+    if (argv[1] == "--version") or (argv[1] == "-v"):
+        print("Version 1.1.2")
+        exit()
+    if (argv[1] == "--help") or (argv[1] == "-h"):
+        print("""usage:
+    command | curtxt 
+    curtxt file
+options:
+    -h, --help - pring this message and exit
+    -v, --version - print version number and exit""")
+        exit()
     curses.wrapper(main)
 
 
