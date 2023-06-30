@@ -32,8 +32,13 @@ Previously opened files will open on the same page they were left off
 * B - toggle progress bar
 * Home - got to the first page
 * End - go to the last page
+### Command line options:
+
+    -h, --help - pring help message and exit
+    -v, --version - print version number and exit
+
 ### Feature roadmap
-- [ ] Moving to a specific page by it's number
-- [ ] Bookmarks
-- [ ] --version and --help options
-- [ ] resize the window if the terminal is resized
+- Moving to a specific page by it's number
+- Bookmarks
+- Resize the window if the terminal is resized
+- Clear history option
