@@ -233,7 +233,7 @@ def init():
         exit()
     if (argv[1] == "--help") or (argv[1] == "-h"):
         print("""usage:
-    command | curtxt 
+    command | curtxt
     curtxt file
 options:
     -h, --help - pring this message and exit
