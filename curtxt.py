@@ -6,6 +6,7 @@ import yaml
 import os
 import curses
 import signal
+import re
 
 
 class main_window:
@@ -112,6 +113,10 @@ class main_window:
 
     def go_to_page(self, page_num):
         self.current_page = page_num - 1
+        if (self.current_page < 0):
+            self.current_page = 0
+        elif (self.current_page > len(self.pages) - 1):
+            self.current_page = len(self.pages) - 1
         self.__draw_window_content()
 
     def get_current_line(self):
@@ -211,6 +216,16 @@ def main(scr):
             case "KEY_END":
                 window.go_to_page(window.get_last_page())
                 bar_win.update_bar(window.get_current_page())
+            case _:
+                if (re.match(r"\d+", char)):
+                    page_num = [char]
+                    while (not char.lower() == "g"):
+                        char = scr.getkey()
+                        if (re.match(r"\d+", char)):
+                            page_num.append(char)
+                        elif (char.lower() == "g"):
+                            window.go_to_page(int("".join(page_num)))
+                            bar_win.update_bar(window.get_current_page())
         scr.refresh()
 
 

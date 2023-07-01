@@ -28,6 +28,7 @@ Curses txt reader does not accept multiple files. Use cat instead.
 Previously opened files will open on the same page they were left off
 ### Controls:
 * Arrow Up/Down - page up and down
+* [page number]g - go to a page with specified number
 * Q - quit (Ctrl+C is also fine)
 * B - toggle progress bar
 * Home - got to the first page
@@ -38,7 +39,6 @@ Previously opened files will open on the same page they were left off
     -v, --version - print version number and exit
 
 ### Feature roadmap
-- Moving to a specific page by it's number
 - Bookmarks
 - Resize the window if the terminal is resized
 - Clear history option
