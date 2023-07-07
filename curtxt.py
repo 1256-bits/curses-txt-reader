@@ -15,15 +15,18 @@ class main_window:
     MARGINS_Y = 8
 
     def __init__(self):
+        # COLS and LINES count from 1, height and width count from 1
         self.height = curses.LINES - main_window.MARGINS_Y
         self.input_raw = self.__get_raw_input()
         self.hash = md5("".join(self.input_raw).encode("UTF-8")).hexdigest()
         self.output_lines = self.__get_output_lines()
         self.longest_line_len = len(max(self.output_lines, key=len)) or 80
+        # The number of pages that fit on the screen
         self.page_count = self.__get_page_count()
         self.width = (self.longest_line_len + 1) * self.page_count + 3
         self.start_x = trunc((curses.COLS - self.longest_line_len * self.page_count - 4) / 2)
         self.start_y = trunc(main_window.MARGINS_Y / 2)
+        # The actual pages with text. len() them for actual page count
         self.pages = self.__fill_pages()
         self.current_page = 0
         del self.output_lines
@@ -241,19 +244,21 @@ def get_history():
 
 
 def init():
-    if os.isatty(0) and (len(argv) == 1):
-        exit()
-    if (argv[1] == "--version") or (argv[1] == "-v"):
-        print("Version 1.1.2")
-        exit()
-    if (argv[1] == "--help") or (argv[1] == "-h"):
-        print("""usage:
+    help_text = """Usage:
     command | curtxt
     curtxt file
-options:
+Options:
     -h, --help - pring this message and exit
-    -v, --version - print version number and exit""")
+    -v, --version - print version number and exit"""
+    if os.isatty(0) and (len(argv) == 1):
         exit()
+    match argv[1]:
+        case "--version" | "-v":
+            print("Version 1.1.2")
+            exit()
+        case "--help" | "-h":
+            print(help_text)
+            exit()
     curses.wrapper(main)
 
 
