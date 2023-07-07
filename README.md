@@ -37,6 +37,7 @@ Previously opened files will open on the same page they were left off
 
     -h, --help - pring help message and exit
     -v, --version - print version number and exit
+    -c, --clear - clear history file
 
 ### Feature roadmap
 - Bookmarks
