@@ -2,7 +2,7 @@
 [![License: MPL 2.0](https://img.shields.io/badge/License-MPL_2.0-brightgreen.svg)](https://opensource.org/licenses/MPL-2.0)
 [![PyPI version](https://badge.fury.io/py/curtxt-reader.svg)](https://badge.fury.io/py/curtxt-reader)
 ## About
-A simple ncurses-based plain text reader written in python.
+A simple(?) ncurses-based plain text reader written in python.
 ## Instalation
 From PyPI:  
 	
