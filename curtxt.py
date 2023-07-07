@@ -96,8 +96,7 @@ class main_window:
         self.window.refresh()
 
     def page_up(self):
-        if (self.current_page == 0):
-            return
+        if (self.current_page == 0): return
         self.current_page -= self.page_count
         self.__draw_window_content()
 
@@ -249,7 +248,8 @@ def init():
     curtxt file
 Options:
     -h, --help - pring this message and exit
-    -v, --version - print version number and exit"""
+    -v, --version - print version number and exit
+    -c, --clear - clear history file"""
     if os.isatty(0) and (len(argv) == 1):
         exit()
     match argv[1]:
