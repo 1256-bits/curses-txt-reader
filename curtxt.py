@@ -192,7 +192,7 @@ def main(scr):
     if (window.hash in hist_yaml):
         window.go_to_line(hist_yaml[window.hash]["line"])
     else:
-        hist_yaml[window.hash] = {"line": 0, "bookmarks": list()}
+        hist_yaml[window.hash] = {"line": 0}
     bar_win = bar(window.get_text_page_count(), window.get_current_page())
     term = open("/dev/tty")
     os.dup2(term.fileno(), 0)
@@ -258,6 +258,12 @@ Options:
             exit()
         case "--help" | "-h":
             print(help_text)
+            exit()
+        case "--clear" | "-c":
+            path = f'{os.environ["HOME"]}/.local/share/curtxt-reader/history'
+            if (os.path.exists(path)):
+                os.remove(path)
+                print("Cleared history")
             exit()
     curses.wrapper(main)
 
