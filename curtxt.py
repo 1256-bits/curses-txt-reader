@@ -243,7 +243,8 @@ def get_history():
 
 
 def init():
-    help_text = """Usage:
+    help_text = """Curses txt reader
+Usage:
     command | curtxt
     curtxt file
 Options:
@@ -251,6 +252,7 @@ Options:
     -v, --version - print version number and exit
     -c, --clear - clear history file"""
     if os.isatty(0) and (len(argv) == 1):
+        print(help_text)
         exit()
     match argv[1]:
         case "--version" | "-v":
