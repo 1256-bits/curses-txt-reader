@@ -40,6 +40,4 @@ Previously opened files will open on the same page they were left off
     -c, --clear - clear history file
 
 ### Feature roadmap
-- Bookmarks
 - Resize the window if the terminal is resized
-- Clear history option
