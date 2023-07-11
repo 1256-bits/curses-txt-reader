@@ -32,6 +32,18 @@ class main_window:
         del self.output_lines
         self.__create_window()
 
+    def resize(self):
+        self.height = curses.LINES - main_window.MARGINS_Y if curses.LINES > 40 else curses.LINES - 4
+        self.output_lines = self.__get_output_lines()
+        self.longest_line_len = len(max(self.output_lines, key=len)) or 80
+        self.page_count = self.__get_page_count()
+        self.width = (self.longest_line_len + 1) * self.page_count + 3
+        self.start_x = trunc((curses.COLS - self.longest_line_len * self.page_count - 4) / 2)
+        self.start_y = trunc(main_window.MARGINS_Y / 2) if curses.LINES > 40 else 2
+        self.pages = self.__fill_pages()
+        del self.output_lines
+        self.__create_window()
+
     def __get_raw_input(self):
         # How are you going to resize if you keep it inside of the class?
         if (len(argv) > 1) and not (os.path.exists(argv[1])):
@@ -96,7 +108,8 @@ class main_window:
         self.window.refresh()
 
     def page_up(self):
-        if (self.current_page == 0): return
+        if (self.current_page == 0):
+            return
         self.current_page -= self.page_count
         self.__draw_window_content()
 
