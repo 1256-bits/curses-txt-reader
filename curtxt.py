@@ -16,7 +16,7 @@ class main_window:
 
     def __init__(self):
         # COLS and LINES count from 1, height and width count from 1
-        self.height = curses.LINES - main_window.MARGINS_Y
+        self.height = curses.LINES - main_window.MARGINS_Y if curses.LINES > 40 else curses.LINES - 4
         self.input_raw = self.__get_raw_input()
         self.hash = md5("".join(self.input_raw).encode("UTF-8")).hexdigest()
         self.output_lines = self.__get_output_lines()
@@ -25,7 +25,7 @@ class main_window:
         self.page_count = self.__get_page_count()
         self.width = (self.longest_line_len + 1) * self.page_count + 3
         self.start_x = trunc((curses.COLS - self.longest_line_len * self.page_count - 4) / 2)
-        self.start_y = trunc(main_window.MARGINS_Y / 2)
+        self.start_y = trunc(main_window.MARGINS_Y / 2) if curses.LINES > 40 else 2
         # The actual pages with text. len() them for actual page count
         self.pages = self.__fill_pages()
         self.current_page = 0
