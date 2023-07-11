@@ -218,6 +218,15 @@ def main(scr):
             case "KEY_END":
                 window.go_to_page(window.get_last_page())
                 bar_win.update_bar(window.get_current_page())
+            case "KEY_RESIZE":
+                if (curses.is_term_resized(curses.LINES, curses.COLS)):
+                    y, x = scr.getmaxyx()
+                    curses.resizeterm(y, x)
+                    scr.clear()
+                    scr.refresh()
+                    window.resize()
+                    del bar_win
+                    bar_win = bar(window.get_text_page_count(), window.get_current_page())
             case _:
                 if (re.match(r"\d+", char)):
                     page_num = [char]
