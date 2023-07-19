@@ -2,6 +2,7 @@
 from math import trunc, ceil
 from sys import argv, stdin
 from hashlib import md5
+from mimetypes import guess_type
 import argparse
 import yaml
 import os
@@ -273,9 +274,13 @@ def init():
     if os.isatty(0) and len(argv) == 1:
         parser.print_help()
         exit()
-    if args.filepath and not os.path.exists(args.filepath):
-        print(f'File {args.filepath} not found')
-        exit()
+    if args.filepath:
+        if not os.path.exists(args.filepath):
+            print(f'{args.filepath}: file not found')
+            exit()
+        if guess_type(args.filepath) != "text/plain":
+            print(f'{args.filepath}: not a plain text file')
+            exit()
     if args.clear:
         path = f'{os.environ["HOME"]}/.local/share/curtxt-reader/history'
         if (os.path.exists(path)):
