@@ -144,12 +144,12 @@ class main_window:
 
 
 class bar:
-    def __init__(self, page_count, current_page):
+    def __init__(self, page_count, current_page, filepath):
         self.width = curses.COLS
         self.height = 1
         self.start_x = 0
         self.start_y = curses.LINES - 1
-        self.filename = argv[1] if len(argv) > 1 else "stdin"
+        self.filename = filepath or "stdin"
         self.current_page = current_page
         self.page_count = page_count
         self.bar_visible = True
@@ -203,7 +203,7 @@ def main(scr, filepath):
         window.go_to_line(hist_yaml[window.hash]["line"])
     else:
         hist_yaml[window.hash] = {"line": 0}
-    bar_win = bar(window.get_text_page_count(), window.get_current_page())
+    bar_win = bar(window.get_text_page_count(), window.get_current_page(), filepath)
     term = open("/dev/tty")
     os.dup2(term.fileno(), 0)
     signal.signal(signal.SIGINT, save_and_exit)
@@ -237,7 +237,7 @@ def main(scr, filepath):
                     scr.refresh()
                     window.resize()
                     del bar_win
-                    bar_win = bar(window.get_text_page_count(), window.get_current_page())
+                    bar_win = bar(window.get_text_page_count(), window.get_current_page(), filepath)
             case _:
                 if (re.match(r"\d+", char)):
                     page_num = [char]
