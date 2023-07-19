@@ -15,7 +15,8 @@ class main_window:
     MARGINS_X = 4
     MARGINS_Y = 8
 
-    def __init__(self):
+    def __init__(self, filepath):
+        self.filepath = filepath
         # COLS and LINES count from 1, height and width count from 1
         self.height = curses.LINES - main_window.MARGINS_Y if curses.LINES > 40 else curses.LINES - 4
         self.input_raw = self.__get_raw_input()
@@ -46,10 +47,6 @@ class main_window:
         self.__create_window()
 
     def __get_raw_input(self):
-        if (len(argv) > 1) and not (os.path.exists(argv[1])):
-            curses.endwin()
-            print(f'File {argv[1]} not found')
-            exit()
         if (len(argv) > 1):
             with open(argv[1]) as file:
                 return file.readlines()
@@ -187,7 +184,7 @@ class bar:
         self.__draw_window_content()
 
 
-def main(scr, filename):
+def main(scr, filepath):
     def save_and_exit(signal, frame):
         hist_yaml[window.hash]["line"] = window.get_current_line()
         with open(f'{os.environ["HOME"]}/.local/share/curtxt-reader/history', "w") as file:
@@ -200,7 +197,7 @@ def main(scr, filename):
     hist_yaml = get_history()
     scr.bkgd(" ", curses.color_pair(1))
     scr.refresh()
-    window = main_window()
+    window = main_window(filepath)
     if (window.hash in hist_yaml):
         window.go_to_line(hist_yaml[window.hash]["line"])
     else:
@@ -267,7 +264,7 @@ def get_history():
 def init():
     parser = argparse.ArgumentParser(
         description="Plain text reader that accepts both files and stdin")
-    parser.add_argument("filename", nargs="?", help="plain text file")
+    parser.add_argument("filepath", nargs="?", help="plain text file")
     parser.add_argument("-c", "--clear", help="clear history and exit", action="store_true")
     parser.add_argument("-v", "--version", help="print version number and exit",
                         action="version", version="Curses txt reader 1.2.2")
@@ -275,13 +272,16 @@ def init():
     if os.isatty(0) and len(argv) == 1:
         parser.print_help()
         exit()
+    if args.filepath and not os.path.exists(args.filepath):
+        print(f'File {args.filepath} not found')
+        exit()
     if args.clear:
         path = f'{os.environ["HOME"]}/.local/share/curtxt-reader/history'
         if (os.path.exists(path)):
             os.remove(path)
             print("Cleared history")
         exit()
-    curses.wrapper(main, args.filename)
+    curses.wrapper(main, args.filepath)
 
 
 if __name__ == "__main__":
