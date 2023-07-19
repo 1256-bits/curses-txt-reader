@@ -272,7 +272,7 @@ def init():
     parser.add_argument("-v", "--version", help="print version number and exit",
                         action="version", version="Curses txt reader 1.2.2")
     args = parser.parse_args()
-    if os.isatty(0) and (not args.filename):
+    if os.isatty(0) and len(argv) == 1:
         parser.print_help()
         exit()
     if args.clear:
