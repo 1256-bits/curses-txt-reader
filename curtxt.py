@@ -2,6 +2,7 @@
 from math import trunc, ceil
 from sys import argv, stdin
 from hashlib import md5
+import argparse
 import yaml
 import os
 import curses
@@ -45,7 +46,6 @@ class main_window:
         self.__create_window()
 
     def __get_raw_input(self):
-        # How are you going to resize if you keep it inside of the class?
         if (len(argv) > 1) and not (os.path.exists(argv[1])):
             curses.endwin()
             print(f'File {argv[1]} not found')
@@ -187,7 +187,7 @@ class bar:
         self.__draw_window_content()
 
 
-def main(scr):
+def main(scr, filename):
     def save_and_exit(signal, frame):
         hist_yaml[window.hash]["line"] = window.get_current_line()
         with open(f'{os.environ["HOME"]}/.local/share/curtxt-reader/history', "w") as file:
@@ -265,32 +265,23 @@ def get_history():
 
 
 def init():
-    help_text = """Curses txt reader
-Usage:
-    command | curtxt
-    curtxt file
-Options:
-    -h, --help - pring this message and exit
-    -v, --version - print version number and exit
-    -c, --clear - clear history file"""
-    if os.isatty(0) and (len(argv) == 1):
-        print(help_text)
+    parser = argparse.ArgumentParser(
+        description="Plain text reader that accepts both files and stdin")
+    parser.add_argument("filename", nargs="?", help="plain text file")
+    parser.add_argument("-c", "--clear", help="clear history and exit", action="store_true")
+    parser.add_argument("-v", "--version", help="print version number and exit",
+                        action="version", version="Curses txt reader 1.2.2")
+    args = parser.parse_args()
+    if os.isatty(0) and (not args.filename):
+        parser.print_help()
         exit()
-    if (len(argv) > 1):
-        match argv[1]:
-            case "--version" | "-v":
-                print("Version 1.2.1")
-                exit()
-            case "--help" | "-h":
-                print(help_text)
-                exit()
-            case "--clear" | "-c":
-                path = f'{os.environ["HOME"]}/.local/share/curtxt-reader/history'
-                if (os.path.exists(path)):
-                    os.remove(path)
-                    print("Cleared history")
-                exit()
-    curses.wrapper(main)
+    if args.clear:
+        path = f'{os.environ["HOME"]}/.local/share/curtxt-reader/history'
+        if (os.path.exists(path)):
+            os.remove(path)
+            print("Cleared history")
+        exit()
+    curses.wrapper(main, args.filename)
 
 
 if __name__ == "__main__":
