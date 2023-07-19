@@ -47,8 +47,9 @@ class main_window:
         self.__create_window()
 
     def __get_raw_input(self):
-        if (len(argv) > 1):
-            with open(argv[1]) as file:
+        # Keeping the check to prioritize the file over stdin
+        if (self.filepath):
+            with open(self.filepath) as file:
                 return file.readlines()
         if not (os.isatty(0)):
             return stdin.readlines()
