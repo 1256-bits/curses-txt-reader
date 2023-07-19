@@ -276,19 +276,20 @@ Options:
     if os.isatty(0) and (len(argv) == 1):
         print(help_text)
         exit()
-    match argv[1]:
-        case "--version" | "-v":
-            print("Version 1.1.2")
-            exit()
-        case "--help" | "-h":
-            print(help_text)
-            exit()
-        case "--clear" | "-c":
-            path = f'{os.environ["HOME"]}/.local/share/curtxt-reader/history'
-            if (os.path.exists(path)):
-                os.remove(path)
-                print("Cleared history")
-            exit()
+    if (len(argv) > 1):
+        match argv[1]:
+            case "--version" | "-v":
+                print("Version 1.2.1")
+                exit()
+            case "--help" | "-h":
+                print(help_text)
+                exit()
+            case "--clear" | "-c":
+                path = f'{os.environ["HOME"]}/.local/share/curtxt-reader/history'
+                if (os.path.exists(path)):
+                    os.remove(path)
+                    print("Cleared history")
+                exit()
     curses.wrapper(main)
 
 
