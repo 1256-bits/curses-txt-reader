@@ -2,7 +2,6 @@
 from math import trunc, ceil
 from sys import argv, stdin
 from hashlib import md5
-from mimetypes import guess_type
 import argparse
 import yaml
 import os
