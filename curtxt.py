@@ -278,7 +278,8 @@ def init():
         if not os.path.exists(args.filepath):
             print(f'{args.filepath}: file not found')
             exit()
-        if guess_type(args.filepath) != "text/plain":
+        # Mimetypes are too unrealiable to use them
+        if not isPlainText(args.filepath):
             print(f'{args.filepath}: not a plain text file')
             exit()
     if args.clear:
@@ -288,6 +289,16 @@ def init():
             print("Cleared history")
         exit()
     curses.wrapper(main, args.filepath)
+
+
+def isPlainText(path):
+    try:
+        with open(path, 'r', encoding="UTF-8") as file:
+            # Errors if a file is not a UTF-8 text file
+            file.readline()
+    except UnicodeDecodeError:
+        return False
+    return True
 
 
 if __name__ == "__main__":
