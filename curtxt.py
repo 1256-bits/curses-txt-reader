@@ -268,7 +268,7 @@ def init():
     parser.add_argument("filepath", nargs="?", help="plain text file")
     parser.add_argument("-c", "--clear", help="clear history and exit", action="store_true")
     parser.add_argument("-v", "--version", help="print version number and exit",
-                        action="version", version="Curses txt reader 1.2.2")
+                        action="version", version="Curses txt reader 1.2.4")
     args = parser.parse_args()
     if os.isatty(0) and len(argv) == 1:
         parser.print_help()
